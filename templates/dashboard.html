@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row between">
+  <h1>Hi, {{ current_user.name.split()[0] }}</h1>
+  <a class="btn" href="{{ url_for('analyze_page') }}">Upload new resume</a>
+</div>
+<div class="stats">
+  <div><b>{{ stats.count }}</b><span>Resumes analyzed</span></div>
+  <div><b>{{ stats.best }}</b><span>Best score</span></div>
+  <div><b>{{ stats.avg }}</b><span>Average score</span></div>
+</div>
+<section class="panel">
+  <h2>Your analyses</h2>
+  {% if items %}
+  <table>
+    <thead><tr><th>File</th><th>Target role</th><th>ATS score</th><th>AI score</th><th>Date</th><th></th></tr></thead>
+    <tbody>
+    {% for r in items %}
+    <tr>
+      <td><a href="{{ url_for('report', rid=r.id) }}">{{ r.original_name }}</a></td>
+      <td>{{ r.role }}</td>
+      <td><span class="pill {{ 'good' if r.ats_score >= 70 else 'warn' if r.ats_score >= 45 else 'bad' }}">{{ r.ats_score }}</span></td>
+      <td>{{ r.ai_score if r.ai_score is not none else '-' }}</td>
+      <td>{{ r.created_at.strftime('%d %b %Y') }}</td>
+      <td class="actions">
+        <a href="{{ url_for('download', rid=r.id) }}">Download</a>
+        <form method="post" action="{{ url_for('delete', rid=r.id) }}" data-confirm="Delete this resume and its report?"><button class="link">Delete</button></form>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No resumes yet. Upload one to get your score and a list of fixes.</p>
+  {% endif %}
+</section>
+{% endblock %}

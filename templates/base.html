@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Resume Analyzer{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head><body>
+<header class="nav">
+  <a class="brand" href="{{ url_for('home') }}">ResumeLens</a>
+  {% if current_user.is_authenticated %}
+  <nav><span>{{ current_user.name }}</span><a href="{{ url_for('logout') }}">Log out</a></nav>
+  {% endif %}
+</header>
+<main>
+  {% for cat, msg in get_flashed_messages(with_categories=true) %}<p class="flash {{ cat }}">{{ msg }}</p>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body></html>

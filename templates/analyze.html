@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Upload resume{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h1>Upload a resume</h1>
+  <p class="muted">Pick the role you are applying for. The score is measured against it.</p>
+  <form method="post" enctype="multipart/form-data" id="upform">
+    <label>Target role
+      <select name="role" required>
+        <option value="" disabled selected>Select role</option>
+        {% for r in roles %}<option>{{ r }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Resume (PDF, DOCX or TXT, max 5 MB)
+      <input type="file" name="resume" accept=".pdf,.docx,.txt" required>
+    </label>
+    <button class="btn" id="upbtn">Analyze resume</button>
+  </form>
+  <p><a href="{{ url_for('dashboard') }}">Back to dashboard</a></p>
+</section>
+{% endblock %}
